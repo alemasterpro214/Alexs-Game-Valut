@@ -1,80 +1,81 @@
-# GameVault — Launcher di giochi (UI moderna)
+# GameVault — Game launcher (modern UI)
 
-Launcher grafico per organizzare e avviare i tuoi giochi, compatibile con **Windows e Linux**.
-Interfaccia scura moderna con sidebar, card con hover, riquadri animati e **sfondo sfocato reale**.
-I collegamenti restano salvati tra le sessioni. **L'app NON disinstalla mai i giochi** — rimuove solo i collegamenti dalla libreria.
+A graphical launcher to organize and start your games, compatible with **Windows and Linux**.
+Dark modern interface with sidebar, cards with hover, animated boxes and a **real blurred background**.
+Links are saved across sessions. **The app NEVER uninstalls games** — it only removes the link from the library.
 
-Contenuto:
+Contents:
 
-- `gamelauncher.py` — sorgente Python unico (Windows + Linux, richiede Python 3.8+)
-- `GameVault.exe` — eseguibile Windows standalone (nessuna installazione)
-- `GameVault` — eseguibile Linux standalone (equivalente dell'.exe)
+- `gamelauncher.py` — single Python source file (Windows + Linux, requires Python 3.8+)
+- `GameVault.exe` — standalone Windows executable (no installation needed)
+- `GameVault` — standalone Linux executable (equivalent of the .exe)
 
-## Interfaccia
+## Interface
 
-- **Sidebar** with icon-nav (Libreria / Impostazioni) + titolo brand
-- **Header** con barra di ricerca Integrata
-- **Card moderne** con icona grande, hover evidenziato, asterisco preferiti, contatore avvii
-- **Piattaforma sfondo**: scegli un'immagine → verrà mostrata **sfocata** (cover + blur + velo scuro) dietro tutta l'interfaccia, ridisegnata in tempo reale al resize
-- 11 lingue: italiano, inglese, tedesco, francese, spagnolo, russo, hindi, coreano, cinese, giapponese, portoghese
+- **Sidebar** with icon-nav (Library / Settings) + brand title
+- **Header** with built-in search bar
+- **Modern cards** with large icon, highlighted hover, favorites asterisk, run counter
+- **Background**: pick an image → it is shown **blurred** (cover + blur + dark veil) behind the whole UI, redrawn in real time on resize
+- 11 languages: English, Italian, German, French, Spanish, Russian, Hindi, Korean, Chinese, Japanese, Portuguese
 
-## Funzionalità
+## Features
 
-### Libreria
-- Tutti i giochi collegati in una griglia con icone
-- **Barra di ricerca** in alto per trovare subito un gioco
-- **Pulsante "+ Game"** nella libreria per aggiungerne uno nuovo
-- **Preferiti**: filtro dedicato + stella su ogni scheda
-- **Cartelle**: ordina i giochi; crea, rinomina, elimina (a destra in alto)
-- **Modifica**: cambio di nome, collegamento, icona, cartella, preferito
-- **Rimozione**: solo il collegamento, il gioco resta sul disco
-- Contatore avvii per ogni gioco
+### Library
+- All linked games in a grid with icons
+- **Search bar** at the top to find a game instantly
+- **"+ Game" button** in the library to add a new one
+- **Favorites**: dedicated filter + star on each card
+- **Folders**: organize games; create, rename, delete (top right)
+- **Edit**: change name, link, icon, folder, favorite
+- **Remove**: only the link, the game stays on disk
+- Run counter for each game
 
-### Aggiunta guidata di un gioco (3 passi)
-1. **Eseguibile o collegamento**: `.exe`, `.lnk`, `.url`, `.bat`, `.cmd` (Windows) — qualsiasi binario o script Linux
-2. **Icona**: estratta automaticamente dall'eseguibile, se presente; altrimenti scegli un'immagine
-3. **Nome**: il nome con cui apparirà in libreria (+ cartella opzionale e preferito)
+### Add game wizard (3 steps)
+1. **Executable or shortcut**: `.exe`, `.lnk`, `.url`, `.bat`, `.cmd` (Windows) — any Linux binary or script
+2. **Icon**: extracted automatically from the executable, if present; otherwise pick an image
+3. **Name**: how the game appears in the library (+ optional folder and favorite)
 
-### Impostazioni
-- **Lingua**: 11 opzioni immediatamente applicate
-- **Sfondo**: scegli immagine → sfocata e scurtita dietro l'interfaccia; puoi rimuoverla
+### Settings
+- **Language**: 11 options applied instantly
+- **Background**: pick an image → shown blurred behind the interface; you can remove it
 
-## Avvio
+## Running
 
 ### Windows
 ```
-GameVault.exe    → doppio clic e via (niente installazione)
+GameVault.exe    → double-click and go (no installation)
 ```
 
 ### Linux
 ```
-chmod +x GameVault             (solo la prima volta)
+chmod +x GameVault             (first time only)
 ./GameVault
 ```
 
-### Da sorgente (entrambi i sistemi)
+### From source (both systems)
 ```
 python gamelauncher.py          # Windows; Linux: python3
 python gamelauncher.py --selftest
 ```
 
-Dipendenze sorgente: `pip install pillow icoextract` + `python3-tk` su Linux.
-Gli eseguibili non richiedono nulla.
+Source dependencies: `pip install pillow icoextract` + `python3-tk` on Linux.
+The executables require nothing.
 
-## Dove sono i dati
-Tutto (giochi, cartelle, lingua, sfondo) è salvato in `~/.gamevault/library.json`.
-Le icone estratte vengono salvate in `~/.gamevault/icons/`.
+## Where is the data
+Everything (games, folders, language, background) is saved in `~/.gamevault/library.json`.
+Extracted icons are saved in `~/.gamevault/icons/`.
 
-## Avvio dei giochi
-- **La directory di lavoro viene impostata sempre alla cartella del gioco**: indispensabile per i giochi HaxeFlixel/Friday Night Funkin' (Psych Engine, Kade Engine, Vs mod) che caricano asset con percorsi relativi — senza CWD corretta crashano o bugano all'avvio
-- I file `.bat`/`.cmd` vengono avviati con CWD corretta (tipici dei giochi itch.io)
-- I collegamenti `.lnk`/`.url` vengono lanciati direttamente, così Windows usa anche argomenti e cartella di lavoro salvati nel collegamento
-- Windows: fallback `os.startfile`; Linux: esegue direttamente il file; gli script `.sh` senza +x vengono avviati con `sh`
+## Launching games
+- **The working directory is always set to the game's folder**: essential for HaxeFlixel/Friday Night Funkin' games (Psych Engine, Kade Engine, Vs mods) which load assets with relative paths — without the correct CWD they crash or glitch on startup
+- `.bat`/`.cmd` files are launched with the correct CWD (typical of itch.io games)
+- `.lnk`/`.url` shortcuts are launched directly, so Windows also applies the arguments and working directory saved in the shortcut
+- Any other file type falls back to the Windows default handler (jars, installers, `steam://` links, documents…) — like a double-click in Explorer, always with the correct CWD
+- Windows: `os.startfile` fallback; Linux: runs the file directly; `.sh` scripts without +x are run with `sh`
 
-## Cosa NON fa (per scelta)
-- ❌ Non disinstalla i giochi: rimuove solo il collegamento dalla libreria
-- ❌ Non cancella mai file di gioco
-- ✅ Tutto è persistente tra sessioni
+## What it does NOT do (by design)
+- ❌ Does not uninstall games: it only removes the link from the library
+- ❌ Never deletes game files
+- ✅ Everything is persistent across sessions
 
-## Licenza
+## License
 MIT
